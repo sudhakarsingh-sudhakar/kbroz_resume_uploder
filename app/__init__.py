@@ -1,8 +1,12 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from run import secret_key_str
 
 
 app = Flask(__name__)
+
+# Set the secret key for the Flask application
+app.config['SECRET_KEY'] = secret_key_str
 # # Configure MySQL connection parameters
 # mysql_config = {
 #     'host': 'localhost',

@@ -1,6 +1,5 @@
 from random import randint
 import jwt
-from .configuration import expiry_time_of_token
 from datetime import datetime, timedelta, timezone
 
 #otp_util() will return 6 digit random integer number
