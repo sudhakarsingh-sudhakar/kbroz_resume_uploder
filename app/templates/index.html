@@ -1,0 +1,42 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="static/main.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Login</h2>
+        <form id="loginForm" action="/login" method="post" enctype="application/json">
+            <label for="email">Email Address</label><br>
+            <input type="email" id="email" name="email" value="you@example.com"><br>
+            <label for="pwd">Password</label><br>
+            <input type="password" id="pwd" name="password" placeholder="Enter password"><br>
+            <button type="submit">LOGIN</button><br>
+        </form>
+    </div>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="static/main.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Login</h2>
+        {% if message %}
+        <p>{{ message }}</p>
+        {% endif %}
+        <form id="loginForm" action="/login" method="post">
+            <label for="email">Doesn't have an account yet? <a href="#">Sign Up</a></label><br>
+            <label for="email">Email Address</label><br>
+            <input type="email" id="email" name="email" value="you@example.com"><br>
+            <label for="pwd">Forgot Password?</label><br>
+            <input type="password" id="pwd" name="password" placeholder="Enter 6 character or more"><br>
+            <label for="remember"><input type="checkbox" id="remember" name="remember"> Remember me</label><br>
+            <button type="submit">LOGIN</button><br>
+        </form>
+    </div>
+</body>
+</html>

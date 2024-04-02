@@ -25,3 +25,15 @@ class User(db.Model):
 
     def __repr__(self):
         return f"User(id={self.id}, username={self.username}, email={self.email})"
+
+
+class UploadedFile(db.Model):
+    __tablename__ = 'tbl_uploaded'
+
+    id = db.Column(db.Integer, primary_key=True)
+    keyword = db.Column(db.String(100))
+    file_data = db.Column(db.LargeBinary) 
+    file_name = db.Column(db.String(255))
+
+    def __repr__(self):
+        return f"UploadedFile(id={self.id}, keyword={self.keyword})"
