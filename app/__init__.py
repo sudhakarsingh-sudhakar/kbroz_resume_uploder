@@ -1,9 +1,10 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_pymongo import PyMongo
 
 
 app = Flask(__name__)
-# # Configure MySQL connection parameters
+# Configure MySQL connection parameters
 # mysql_config = {
 #     'host': 'localhost',
 #     'user': 'root',
@@ -15,17 +16,19 @@ app = Flask(__name__)
 # # Establish MySQL connection
 # db_connection = mysql.connector.connect(**mysql_config)
 
-# Configure MySQL database connection
+# # Configure MySQL database connection
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:Niraj@localhost:3306/new_etm'
+# app.config['MONGO_URI'] = "URl"
 
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Initialize SQLAlchemy
+# # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# # Initialize SQLAlchemy
 db = SQLAlchemy(app)
+# db = PyMongo(app)
 
-
-# Import your views after initializing the Flask app to avoid circular imports
+# # Import your views after initializing the Flask app to avoid circular imports
 from app import views
 
-# Import models module to ensure the models are created
+# # Import models module to ensure the models are created
 from app import models

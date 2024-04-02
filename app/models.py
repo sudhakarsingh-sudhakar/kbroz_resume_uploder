@@ -1,6 +1,6 @@
 from app import db
 
-class User(db.Model):
+class User(db.Document):
     __tablename__ = 'tbl_user'
 
     id = db.Column(db.Integer, primary_key=True)

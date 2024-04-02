@@ -3,14 +3,13 @@ from flask import request, jsonify, make_response, current_app as app
 from flask import render_template
 from flask import Flask, request, jsonify
 from util.utility import *
-from app.models import User  # Import your model class here
+# from app.models import User  
 from werkzeug.security import check_password_hash
 
 
 @app.route('/')
 def index():
     return render_template('index.html')
-
 
 #------- login api----------->>>
     
