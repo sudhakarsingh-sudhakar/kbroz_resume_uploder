@@ -32,6 +32,7 @@ class UploadedFile(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     keyword = db.Column(db.String(100))
+    name = db.Column(db.String(100))
     file_data = db.Column(db.LargeBinary) 
     file_name = db.Column(db.String(255))
 

@@ -71,7 +71,7 @@ def login_route():
         token = generate_token(email)
         response = make_response(jsonify({'status': True, 'message': 'Login successful', 'token': token}), 200)
         response.set_cookie('jwt_token', token, httponly=True, secure=True)
-        return response
+        return render_template('homepage.html')
     else:
         # User with provided email and password does not exist
         return render_template('index.html', message='Invalid email or password'), 401
@@ -87,18 +87,19 @@ def index():
 @app.route('/login/upload', methods=['POST'])
 def upload_file():
     keyword = request.form.get('keyword')
+    name = request.form.get("name")
     file = request.files['file']
     file_name = file.filename
+    print(f"name : {name} , keyword : {keyword}, filename : {file_name}")
 
     if not (keyword and file):
         return jsonify({'error': 'Keyword and file are required.'}), 400
 
-    uploaded_file = UploadedFile(keyword=keyword, file_name=file_name,file_data=file.read())
+    uploaded_file = UploadedFile(keyword=keyword,name = name ,file_name=file_name,file_data=file.read())
     db.session.add(uploaded_file)
     db.session.commit()
 
-    return jsonify({'message': 'File uploaded successfully.'})
-
+    return render_template("homepage.html")
 # download file on basis of keyword
 @app.route('/login/download', methods=['GET'])
 def download_file():
