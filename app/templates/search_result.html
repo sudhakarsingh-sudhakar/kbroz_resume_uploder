@@ -6,15 +6,14 @@
     <title>kbroz-Search</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/2.0.3/css/dataTables.bootstrap5.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="C:/Users/sudha/OneDrive/Documents/kbroz/kbroz_resume_uploder/app/templates/css/homepage.css">
 
     <script defer src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script defer src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
     <script defer src="https://cdn.datatables.net/2.0.3/js/dataTables.bootstrap5.js"></script>
-    <script defer src="js/search.js"></script>
-    <script defer src="js/export_csv.js"></script>
-    
+    <script defer src="C:/Users/sudha/OneDrive/Documents/kbroz/kbroz_resume_uploder/app/templates/css/js/search.js"></script>
+    <script defer src="C:/Users/sudha/OneDrive/Documents/kbroz/kbroz_resume_uploder/app/templates/css/js/export_csv.js"></script>
 
 </head>
 <body>
@@ -23,7 +22,7 @@
         <a href="#">Logout</a>
     </header>
     <div class="container">
-        <button type="button" onclick="tableToCSV()"> Export To CSV </button>
+        <button type="button" onclick="tableToCSV()" class="btn btn-warning btn-sm"> Export To CSV </button>
         <table id="search" class="table table-striped" style="width:100%">
             <thead>
                 <tr>
@@ -46,14 +45,50 @@
                         <td>{{ sr.created_dt }}</td>
                         <td>{{ sr.updated_dt }}</td>
                         <td>
-                            <a href="edit/{{ sr.id }}" class="btn btn-success">Edit</a> 
-                            <a href="download/{{ sr.id }}" class="btn btn-success">Down</a>
-                            <a href="delete/{{ sr.id }}" onClick="return confirm('Are Sure want To Deleted ?')" class="btn btn-danger">Del</a>  
+                            <!-- <a href="edit/{{ sr.id }}" class="btn btn-success">Edit</a>  -->
+                            <a href="/update/{{row.id}}" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modaledit{{row.0}}">Edit</a>
+                            <a href="download/{{ sr.id }}" class="btn btn-success btn-sm">Down</a>
+                            <a href="delete/{{ sr.id }}" onClick="return confirm('Are Sure want To Deleted ?')" class="btn btn-danger btn-sm">Del</a>  
                         </td>
                     </tr>
+                    <!-- Update -->
+                    <div id="modaledit{{row.0}}" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title text-primary" style="align-content: center;">Update Entry</h5>    
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{{ url_for('update')}}" method="POST">
+                                        <input type="hidden" name="id" value="{{row.0}}">
+                                        <div class="form-group">
+                                        <label>Full Name</label>
+                                        <input value="{{row.name}}" type="text" name="name" class="form-control" id="exampleFormControlInput1" placeholder="Enter Full Name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Tags</label>
+                                            <input value="{{row.tags}}" type="text" name="keyword" class="form-control" id="exampleFormControlInput1" placeholder="Enter Tags">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="file" id="exampleFormControlInput1" name="resume" accept=".pdf,.doc,.docx" class="form-control" >
+                                        </div>
+                                        <button type="submit" class="btn btn-success mb-2">Update</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End of update-->
                 {% endfor %}    
             </tbody>
         </table>
     </div>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>    
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>
