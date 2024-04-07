@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Upload Portal</title>
+    <link rel="stylesheet" type="text/css" href="static/homepage.css">
+</head>
+<body>
+    <header id="header">
+        <a href="#">Home</a>
+        <a href="#">Logout</a>
+    </header>
+    <div id="content">
+        <div id="upload-form">
+            <h2>Upload Resume</h2>
+            <form action="/login/upload" method="post" enctype="multipart/form-data">
+                <label for="resume">Choose a file:</label>
+                <input type="text" id="resume" name="name" placeholder="Name">
+                <input type="text" id="resume" name="keyword" placeholder="Tags">
+                <input type="file" id="resume" name="file" accept=".pdf,.doc,.docx">
+                <button type="submit">Upload</button>
+            </form>
+        </div>
+        <div id="search-form">
+            <h2>Search Resume</h2>
+            <form action="/login/all_files">
+                <input type="text" id="resume" name="search" placeholder="Enter Tags..">
+                <button type="submit">Upload</button>
+            </form>
