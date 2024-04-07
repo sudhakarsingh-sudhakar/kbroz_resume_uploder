@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kbroz-Search</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/2.0.3/css/dataTables.bootstrap5.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+
+    <script defer src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script defer src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
+    <script defer src="https://cdn.datatables.net/2.0.3/js/dataTables.bootstrap5.js"></script>
+    <script defer src="js/search.js"></script>
+    <script defer src="js/export_csv.js"></script>
+    
+
+</head>
+<body>
+    <header id="header">
+        <a href="#">Home</a>
+        <a href="#">Logout</a>
+    </header>
+    <div class="container">
+        <button type="button" onclick="tableToCSV()"> Export To CSV </button>
+        <table id="search" class="table table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Tags</th>
+                    <th>Created by</th>
+                    <th>Created on</th>
+                    <th>Updated</th>
+                    <th width="200">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sr in search_results %}
+                    <tr>
+                        <td>{{ sr.id }}</td>
+                        <td>{{ sr.name }}</td>
+                        <td>{{ sr.tags }}</td>
+                        <td>{{ sr.user }}</td>
+                        <td>{{ sr.created_dt }}</td>
+                        <td>{{ sr.updated_dt }}</td>
+                        <td>
+                            <a href="edit/{{ sr.id }}" class="btn btn-success">Edit</a> 
+                            <a href="download/{{ sr.id }}" class="btn btn-success">Down</a>
+                            <a href="delete/{{ sr.id }}" onClick="return confirm('Are Sure want To Deleted ?')" class="btn btn-danger">Del</a>  
+                        </td>
+                    </tr>
+                {% endfor %}    
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
