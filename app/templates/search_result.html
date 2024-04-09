@@ -6,14 +6,30 @@
     <title>kbroz-Search</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/2.0.3/css/dataTables.bootstrap5.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="static/homepage.css">
+    <style>
+        #header {
+        background-color: #4CAF50;
+        color: white;
+        padding: 1rem;
+        text-align: right;
+        }
+
+        #header a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 1rem;
+        }
+
+        #header a:hover {
+            text-decoration: underline;
+        }
+    </style>
 
     <script defer src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script defer src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
     <script defer src="https://cdn.datatables.net/2.0.3/js/dataTables.bootstrap5.js"></script>
     <script defer src="static/js/search.js"></script>
-    <script defer src="static/js/export_csv.js"></script>
     
 </head>
 <body>
@@ -91,6 +107,39 @@
             </tbody>
         </table>
     </div>
+    <script>
+        new DataTable('#search');
+    </script>
+    <script>
+        function tableToCSV() {
+            let csv_data = [];
+            let rows = document.getElementsByTagName('tr');
+            for (let i = 0; i < rows.length ; i++) {
+                let cols = rows[i].querySelectorAll('td,th');
+                let csvrow = [];
+                for (let j = 0; j < cols.length-1; j++) {
+                    csvrow.push(cols[j].innerHTML);
+                }
+                csv_data.push(csvrow.join(","));
+            }
+            csv_data = csv_data.join('\n');
+            downloadCSVFile(csv_data);
+        }
+
+        function downloadCSVFile(csv_data) {
+            CSVFile = new Blob([csv_data], {
+                type: "text/csv"
+            });
+            let temp_link = document.createElement('a');
+            temp_link.download = "search_result";
+            let url = window.URL.createObjectURL(CSVFile);
+            temp_link.href = url;
+            temp_link.style.display = "none";
+            document.body.appendChild(temp_link);
+            temp_link.click();
+            document.body.removeChild(temp_link);
+        }
+    </script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>    
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
