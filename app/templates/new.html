@@ -6,19 +6,19 @@
     <title>kbroz-Search</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/2.0.3/css/dataTables.bootstrap5.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="static/homepage.css">
+    <link rel="stylesheet" type="text/css" href="homepage.css">
 
     <script defer src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script defer src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
     <script defer src="https://cdn.datatables.net/2.0.3/js/dataTables.bootstrap5.js"></script>
-    <script defer src="static/js/search.js"></script>
-    <script defer src="static/js/export_csv.js"></script>
+    <script defer src="search.js"></script>
+    <script defer src="export_csv.js"></script>
     
 </head>
 <body>
     <header id="header">
-    
+        <a href="/login" method ="GET">Home</a>
         <a href="/logout" method ="GET">Logout</a>
     </header>
     <div class="container">
@@ -27,9 +27,8 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>File Name</th>
+                    <th>Name</th>
                     <th>Tags</th>
-                    <th>User</th>
                     <!-- <th>Created by</th>
                     <th>Created on</th>
                     <th>Updated</th> -->
@@ -42,18 +41,18 @@
                         <td>{{ sr.id }}</td>
                         <td>{{ sr.file_name }}</td>
                         <td>{{ sr.keyword }}</td>
-                        <td>{{ sr.user }}</td> 
-                        <!-- <td>{{ sr.created_dt }}</td>
-                        <td>{{ sr.updated_dt }}</td> --> 
+                        <!-- <td>{{ sr.user }}</td>
+                        <td>{{ sr.created_dt }}</td>
+                        <td>{{ sr.updated_dt }}</td> -->
                         <td>
                             <!-- <a href="edit/{{ sr.id }}" class="btn btn-success">Edit</a>  -->
-                            <a href="/update/{{sr.id}}" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modaledit{{sr.0}}">Edit</a>
+                            <a href="/update/{{sr.id}}" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modaledit{{row.0}}">Edit</a>
                             <a href="/login/download?id={{ sr.id }}" class="btn btn-success btn-sm">Down</a>
                             <a href="delete/{{ sr.id }}" onClick="return confirm('Are Sure want To Deleted ?')" class="btn btn-danger btn-sm">Del</a>  
                         </td>
                     </tr>
                     <!-- Update -->
-                    <div id="modaledit{{sr.0}}" class="modal fade" role="dialog">
+                    <div id="modaledit{{row.0}}" class="modal fade" role="dialog">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -63,19 +62,15 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="/login/upload_update/{{sr.id}}" method="POST">
-                                        <input type="hidden" name="id" value="{{sr.user}}">
+                                    <form action="{{ url_for('update')}}" method="POST">
+                                        <input type="hidden" name="id" value="{{row.0}}">
                                         <div class="form-group">
                                         <label>Full Name</label>
-                                        <input value="{{ sr.user }}" type="text" name="user" class="form-control" id="exampleFormControlInput1" placeholder="Enter Full Name">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>File Name</label>
-                                            <input value="{{sr.file_name}}" type="text" name="file_name" class="form-control" id="exampleFormControlInput1" placeholder="Enter Tags">
+                                        <input value="{{row.name}}" type="text" name="name" class="form-control" id="exampleFormControlInput1" placeholder="Enter Full Name">
                                         </div>
                                         <div class="form-group">
                                             <label>Tags</label>
-                                            <input value="{{sr.keyword}}" type="text" name="keyword" class="form-control" id="exampleFormControlInput1" placeholder="Enter Tags">
+                                            <input value="{{row.tags}}" type="text" name="keyword" class="form-control" id="exampleFormControlInput1" placeholder="Enter Tags">
                                         </div>
                                         <div class="form-group">
                                             <input type="file" id="exampleFormControlInput1" name="resume" accept=".pdf,.doc,.docx" class="form-control" >

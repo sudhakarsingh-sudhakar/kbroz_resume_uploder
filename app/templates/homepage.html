@@ -7,9 +7,13 @@
     <link rel="stylesheet" type="text/css" href="static/homepage.css">
 </head>
 <body>
+<div class="container">
+    {% if message %}
+    <p>{{ message }}</p>
+    {% endif %}
     <header id="header">
         <a href="#">Home</a>
-        <a href="#">Logout</a>
+        <a href="/logout" method ="GET">Logout</a>
     </header>
     <div id="content">
         <div id="upload-form">
@@ -24,7 +28,27 @@
         </div>
         <div id="search-form">
             <h2>Search Resume</h2>
-            <form action="/login/all_files">
+            <form action="/login/all_files" method="get" enctype="multipart/form-data">
                 <input type="text" id="resume" name="search" placeholder="Enter Tags..">
-                <button type="submit">Upload</button>
+                <button type="submit">Search</button>
             </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Function to display popup notification
+    function showPopup(message) {
+        alert(message);
+    }
+
+    // Check if a success message is present in the HTML
+    var messageElement = document.querySelector('.container p');
+    if (messageElement && messageElement.textContent.includes('Login successful')) {
+        // If success message is found, display popup notification
+        showPopup('Login successful');
+    }
+</script>
+
+</body>
+</html>
