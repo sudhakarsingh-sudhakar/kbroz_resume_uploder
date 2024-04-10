@@ -94,19 +94,20 @@ def index():
 @app.route('/login/upload', methods=['POST'])
 def upload_file():
     keyword = request.form.get('keyword')
-    name = request.form.get("name")
+    user = request.form.get("user")
     file = request.files['file']
     file_name = file.filename
-    print(f"name : {name} , keyword : {keyword}, filename : {file_name}")
+    print(f"name : {user} , keyword : {keyword}, filename : {file_name}")
 
     if not (keyword and file):
-        return jsonify({'error': 'Keyword and file are required.'}), 400
+        # return jsonify({'error': 'Keyword and file are required.'}), 400
+        return render_template("homepage.html")
 
-    uploaded_file = UploadedFile(keyword=keyword,name = name ,file_name=file_name,file_data=file.read())
+    uploaded_file = UploadedFile(keyword=keyword,user = user ,file_name=file_name,file_data=file.read())
     db.session.add(uploaded_file)
     db.session.commit()
 
-    return render_template("homepage.html")
+    return render_template("homepage.html", message = "file uploaded succesfully")
 # download file on basis of keyword
 @app.route('/login/download', methods=['GET'])
 def download_file():
@@ -230,6 +231,7 @@ def delete(id):
 
     db.session.commit()
 
-    return jsonify(message= 'Uploaded file deleted successfully.', serach_result= files_data), 200
+    #return jsonify(message= 'Uploaded file deleted successfully.', serach_result= files_data), 200
+    return render_template("search_result.html",  search_results =files_data)
     
     
