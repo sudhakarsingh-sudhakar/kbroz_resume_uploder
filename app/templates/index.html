@@ -123,4 +123,12 @@
                     });
                 }
             </script>
+            <script>
+                // Remove JWT token from local storage
+                localStorage.removeItem('jwt_token');
+                document.cookie = "jwt_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                // Remove session cookie by setting its expiration date to the past
+                document.cookie = "session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+            </script>
         </body>

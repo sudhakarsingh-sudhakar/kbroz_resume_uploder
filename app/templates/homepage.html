@@ -132,6 +132,9 @@
                 <label for="resume">Choose a file:</label>
                 <input type="text" id="resume" name="user" placeholder="Name" required>
                 <input type="text" id="resume" name="keyword" placeholder="Tags" required>
+                <input type="text" id="resume" name="location" placeholder="Location" required>
+                <input type="text" id="resume" name="salary" placeholder="Salary" required>
+                <input type="text" id="resume" name="Experience" placeholder="Experience" required>
                 <input type="file" id="resume" name="file" accept=".pdf,.doc,.docx" required>
                 <button type="submit">Upload</button>
             </form>
@@ -139,7 +142,10 @@
         <div id="search-form">
             <h2>Search Resume</h2>
             <form action="/login/all_files" method="get" enctype="multipart/form-data">
-                <input type="text" id="resume" name="search" placeholder="Enter Tags.." required>
+                <input type="text" id="resume" name="keyword" placeholder="Enter Tags.." required>
+                <input type="text" id="resume" name="location" placeholder="Enter Location" required>
+                <input type="text" id="resume" name="Experience" placeholder="Enter Experience" required>
+                <input type="text" id="resume" name="salary" placeholder="Enter Salary" required>
                 <button type="submit">Search</button>
             </form>
         </div>
@@ -157,6 +163,20 @@
     if (messageElement && messageElement.textContent.includes('Login successful')) {
         // If success message is found, display popup notification
         showPopup('Login successful');
+    }
+</script>
+<script>
+    // Get the token from the rendered template
+    var token = "{{ token }}";
+    
+    // Check if the token exists
+    if (token) {
+        // Save the token to the browser's local storage
+        localStorage.setItem('jwt_token', token);
+        document.cookie = "jwt_token=" + token + "; path=/; secure=true";
+        console.log("Token saved to local storage:", token);
+    } else {
+        console.error("No token found.");
     }
 </script>
 

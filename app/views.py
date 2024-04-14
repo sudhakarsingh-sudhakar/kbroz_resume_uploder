@@ -4,6 +4,7 @@ from util.utility import *
 from app.models import User, UploadedFile
 from werkzeug.security import check_password_hash
 from io import BytesIO
+from sqlalchemy import and_
 
 
 
@@ -58,13 +59,20 @@ def generate_token(email):
 
 
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['POST', "GET"])
 def login_route():
+    token = request.cookies.get('jwt_token')
     email = request.form.get('email')
     password = request.form.get('password')
 
+
+    if request.method == "GET" and token :
+        return render_template("homepage.html")
+
+
     if not email or not password:
-        return jsonify({'status': False, 'message': 'Email and password are required'}), 400
+        #return jsonify({'status': False, 'message': 'Email and password are required'}), 400
+        return render_template("index.html")
 
     user = User.query.filter_by(email=email, password=password).first()
 
@@ -72,16 +80,23 @@ def login_route():
         # User with provided email and password exists
         # Generate JWT token and set cookie
         token = generate_token(email)
-        response = make_response(jsonify({'status': True, 'message': 'Login successful', 'token': token}), 200)
+        response = make_response(jsonify({'status': True, 'message': 'Login successful', 'token': token , 'email': email}), 200)
+        print(response)
 
         response.set_cookie('jwt_token', token, httponly=True, secure=True)
         print(response)
+
         # return redirect(url_for('index'))
         return render_template('homepage.html', token = token)
         #return response
     else:
         # User with provided email and password does not exist
         return render_template('index.html', message='Invalid email or password'), 401
+    
+
+    
+    
+
     
 
 
@@ -96,6 +111,9 @@ def upload_file():
     keyword = request.form.get('keyword')
     user = request.form.get("user")
     file = request.files['file']
+    salary = request.form['salary']
+    experience = request.form['Experience']
+    location = request.form['location']
     file_name = file.filename
     print(f"name : {user} , keyword : {keyword}, filename : {file_name}")
 
@@ -103,7 +121,8 @@ def upload_file():
         # return jsonify({'error': 'Keyword and file are required.'}), 400
         return render_template("homepage.html")
 
-    uploaded_file = UploadedFile(keyword=keyword,user = user ,file_name=file_name,file_data=file.read())
+    uploaded_file = UploadedFile(keyword = keyword, user = user , file_name = file_name , 
+                                 salary = salary, experience =  experience,location = location, file_data =file.read())
     db.session.add(uploaded_file)
     db.session.commit()
 
@@ -111,10 +130,13 @@ def upload_file():
 # download file on basis of keyword
 @app.route('/login/download', methods=['GET'])
 def download_file():
+    token = request.cookies.get('jwt_token')
     id = request.args.get('id')
 
     if not id:
         return jsonify({'error': 'id is required.'}), 400
+    if not token:
+        return render_template('index.html')
 
     uploaded_file = UploadedFile.query.filter_by(id=id).first()
     if not uploaded_file:
@@ -135,18 +157,35 @@ def download_file():
 
 @app.route('/login/all_files', methods=['GET'])
 def list_files():
-    partial_keyword = request.args.get('search')
+    partial_keyword = request.args.get('keyword')
+    partial_location = request.args.get('location')
+    partial_experience = request.args.get('Experience')
+    partial_salary = request.args.get('salary')
+    print(f"partial_keyword  : {partial_keyword} ,, {partial_location},,,,{partial_experience},,,, salary {partial_salary}")
+    token = request.cookies.get('jwt_token')
     global SEARCH 
-    
-    if not partial_keyword:
+    if not token:
+        return render_template('index.html')
+    if not partial_keyword  or not partial_salary  or not partial_location or not partial_experience:
         flash("please provide a vaild keyword")
         #return jsonify({'error': 'Keyword is required.'}), 400
         return render_template("homepage.html")
     
     SEARCH = partial_keyword
 
-    files = UploadedFile.query.filter(UploadedFile.keyword.like(f'{partial_keyword}%')).all()
-    files_data = [{'id': file.id, 'keyword': file.keyword,'file_name': file.file_name,'user':file.user} for file in files]
+    files = (UploadedFile.query
+         .filter(and_(
+             UploadedFile.keyword.like(f'{partial_keyword}%'),
+             UploadedFile.location.like(f'{partial_location}%'),
+             UploadedFile.experience <= partial_experience,
+             UploadedFile.salary <= partial_salary 
+         ))
+         .all())
+    print(f"files querry {files}")
+
+    #files = UploadedFile.query.filter(UploadedFile.keyword.like(f'{partial_keyword}%')).all()
+    files_data = [{'id': file.id, 'keyword': file.keyword,'file_name': file.file_name,'user':file.user , 'location':file.location ,
+                   'salary': file.salary, 'experience': file. experience} for file in files]
     #return files_data
     return render_template("search_result.html" ,search_results =files_data)
 
@@ -158,6 +197,7 @@ def logout():
     # Get the JWT token from the request cookies
     print(request)
     token = request.cookies.get('jwt_token')
+    print(token)
     
 
     if not token:
@@ -183,6 +223,7 @@ def logout():
 @app.route('/login/upload_update/<int:id>', methods=['POST'])
 def update_file(id):
     print(request.form)
+    token = request.cookies.get('jwt_token')
     keyword = request.form.get('keyword')
     user = request.form.get("user")
     file = request.files.get('file')  # Use get() to safely get the file, which can be None
@@ -194,6 +235,8 @@ def update_file(id):
 
     # Query the database to find the uploaded file record based on the provided id
     uploaded_file = UploadedFile.query.get(id)
+    if not token:
+        return render_template('index.html')
 
     if not uploaded_file:
         flash("uploaded file not find")
@@ -218,7 +261,10 @@ def update_file(id):
 
 @app.route('/login/delete/<int:id>')
 def delete(id):
+    token = request.cookies.get('jwt_token')
     uploaded_file = UploadedFile.query.get(id)
+    if not token:
+        return render_template('index.html')
 
     if not uploaded_file:
         flash("uploaded file not find")
