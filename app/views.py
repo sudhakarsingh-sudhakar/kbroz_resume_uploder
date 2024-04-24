@@ -111,22 +111,25 @@ def upload_file():
     keyword = request.form.get('keyword')
     user = request.form.get("user")
     file = request.files['file']
-    salary = request.form['salary']
-    experience = request.form['Experience']
+    salary = request.form['selectCTC']
+    contact = request.form['contact']
+    email = request.form['email']
+    experience = request.form['selectExperiance']
     location = request.form['location']
     file_name = file.filename
-    print(f"name : {user} , keyword : {keyword}, filename : {file_name}")
+    print(f"name : {user} , keyword : {keyword}, filename : {file_name}, sal  :{ salary}, ctc : {experience , contact , email} ")
 
     if not (keyword and file):
         # return jsonify({'error': 'Keyword and file are required.'}), 400
         return render_template("homepage.html")
 
     uploaded_file = UploadedFile(keyword = keyword, user = user , file_name = file_name , 
-                                 salary = salary, experience =  experience,location = location, file_data =file.read())
+                                 salary = salary, experience =  experience,location = location, 
+                                 email = email, contact = contact, file_data =file.read())
     db.session.add(uploaded_file)
     db.session.commit()
 
-    return render_template("homepage.html", message = "file uploaded succesfully")
+    return render_template("homepage.html", message = "File uploaded succesfully")
 # download file on basis of keyword
 @app.route('/login/download', methods=['GET'])
 def download_file():
@@ -158,10 +161,13 @@ def download_file():
 @app.route('/login/all_files', methods=['GET'])
 def list_files():
     partial_keyword = request.args.get('keyword')
+    partial_user = request.args.get('user')
+    partial_email = request.args.get('email')
+    partial_contact = request.args.get('contact')
     partial_location = request.args.get('location')
-    partial_experience = request.args.get('Experience')
-    partial_salary = request.args.get('salary')
-    print(f"partial_keyword  : {partial_keyword} ,, {partial_location},,,,{partial_experience},,,, salary {partial_salary}")
+    partial_experience = request.args.get('selectExperiance')
+    partial_salary = request.args.get('selectCTC')
+    print(f"partial_keyword  : {partial_keyword} ,, {partial_location},,,defffef,{partial_experience},,,, salary {partial_salary},,,{partial_user}")
     token = request.cookies.get('jwt_token')
     global SEARCH 
     if not token:
@@ -174,19 +180,27 @@ def list_files():
     SEARCH = partial_keyword
 
     files = (UploadedFile.query
-         .filter(and_(
-             UploadedFile.keyword.like(f'{partial_keyword}%'),
-             UploadedFile.location.like(f'{partial_location}%'),
-             UploadedFile.experience <= partial_experience,
-             UploadedFile.salary <= partial_salary 
-         ))
-         .all())
+             .filter(and_(
+                 UploadedFile.keyword.like(f'{partial_keyword}%'),
+                 UploadedFile.location.like(f'{partial_location}%'),
+                 UploadedFile.experience == partial_experience,
+                 UploadedFile.salary == partial_salary,
+                 UploadedFile.user.like(f'{partial_user}%'),
+                 UploadedFile.email.like(f'{partial_email}%'),
+                 UploadedFile.contact.like(f'{partial_contact}%')
+             ))
+             .all())
     print(f"files querry {files}")
 
     #files = UploadedFile.query.filter(UploadedFile.keyword.like(f'{partial_keyword}%')).all()
-    files_data = [{'id': file.id, 'keyword': file.keyword,'file_name': file.file_name,'user':file.user , 'location':file.location ,
-                   'salary': file.salary, 'experience': file. experience} for file in files]
+    files_data = [{'id': file.id, 'keyword': file.keyword, 'file_name': file.file_name,
+                   'user': file.user, 'location': file.location, 'salary': file.salary,
+                   'experience': file.experience, 'email': file.email, 'contact': file.contact}
+                  for file in files]
     #return files_data
+    if not files_data:
+        return render_template("homepage.html", message = "No files found matching the search criteria.")
+    print(f'files_data: {files_data}')
     return render_template("search_result.html" ,search_results =files_data)
 
 
