@@ -160,13 +160,13 @@
                 <div class="form-group custom-dropdown">
                     <select class="form-control form-control-lg" id="resume" name="selectCTC" required>
                         <option value="">Choose CTC</option>
-                        <option value="CTC1">Fresher </option>
-                        <option value="CTC2">1-3 Years</option>
-                        <option value="CTC3">4-6 Years</option>
-                        <option value="CTC4">7-10 Years</option>
-                        <option value="CTC5">11-15 Years</option>
-                        <option value="CTC6">16-20 Years</option>
-                        <option value="CTC7">20+ Years</option>
+                        <option value="CTC1">0-3 Lakhs </option>
+                        <option value="CTC2">4-8 Lakhs</option>
+                        <option value="CTC3">9-12 Lakhs</option>
+                        <option value="CTC4">13-16 Lakhss</option>
+                        <option value="CTC5">17-20 Lakhs</option>
+                        <option value="CTC6">21-25 Lakhs</option>
+                        <option value="CTC7">26+ Years</option>
                     </select>
                 </div>
                 <input type="file" id="resume" name="file" accept=".pdf,.doc,.docx" required>
@@ -176,13 +176,13 @@
         <div id="search-form">
             <h2>Search Resume</h2>
             <form action="/login/all_files" method="get" enctype="multipart/form-data">
-                <input type="text" id="resume" name="user" placeholder="Name">
-                <input type="text" id="resume" name="keyword" placeholder="Job Profile">
-                <input type="text" id="resume" name="contact" placeholder="Mobile No">
-                <input type="text" id="resume" name="email" placeholder="Email">
-                <input type="text" id="resume" name="location" placeholder="Location">
+                <input type="text" id="resume" name="user" placeholder="Name" required>
+                <input type="text" id="resume" name="keyword" placeholder="Job Profile" required>
+                <input type="text" id="resume" name="contact" placeholder="Mobile No" required>
+                <input type="text" id="resume" name="email" placeholder="Email" required>
+                <input type="text" id="resume" name="location" placeholder="Location" required>
                 <div class="form-group custom-dropdown">
-                    <select class="form-control form-control-lg" id="resume" name="selectExperiance">
+                    <select class="form-control form-control-lg" id="resume" name="selectExperiance" required>
                         <option value="">Select Experiance</option>
                         <option value="exp1">Fresher </option>
                         <option value="exp2">1-3 Years</option>
@@ -194,15 +194,15 @@
                     </select>
                 </div>
                 <div class="form-group custom-dropdown">
-                    <select class="form-control form-control-lg" id="resume" name="selectCTC">
+                    <select class="form-control form-control-lg" id="resume" name="selectCTC" required>
                         <option value="">Choose CTC</option>
-                        <option value="CTC1">Fresher </option>
-                        <option value="CTC2">1-3 Years</option>
-                        <option value="CTC3">4-6 Years</option>
-                        <option value="CTC4">7-10 Years</option>
-                        <option value="CTC5">11-15 Years</option>
-                        <option value="CTC6">16-20 Years</option>
-                        <option value="CTC7">20+ Years</option>
+                        <option value="CTC1">0-3 Lakhs </option>
+                        <option value="CTC2">4-8 Lakhs</option>
+                        <option value="CTC3">9-12 Lakhs</option>
+                        <option value="CTC4">13-16 Lakhss</option>
+                        <option value="CTC5">17-20 Lakhs</option>
+                        <option value="CTC6">21-25 Lakhs</option>
+                        <option value="CTC7">26+ Years</option>
                     </select>
                 </div>
                 <button type="submit">Search</button>
