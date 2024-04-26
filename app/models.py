@@ -41,6 +41,7 @@ class UploadedFile(db.Model):
     experience = db.Column(db.String(100))
     email = db.Column(db.String(100))
     contact = db.Column(db.String(19))
+    uploaded_by = db.Column(db.String(100))
 
 
 

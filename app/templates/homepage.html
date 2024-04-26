@@ -6,6 +6,8 @@
     <title>Resume Upload Portal</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="static/homepage.css">
+    
+
     <style>
         body {
     font-family: Arial, sans-serif;
@@ -140,7 +142,7 @@
         <div id="upload-form">
             <h2>Upload Resume</h2>
             <form action="/login/upload" method="post" enctype="multipart/form-data">
-                <input type="text" id="resume" name="user" placeholder="Name" required>
+                <input type="text" id="resume" name="username" placeholder="Name" required>
                 <input type="text" id="resume" name="keyword" placeholder="Job Profile" required>
                 <input type="text" pattern="[6-9]{1}[0-9]{9}" id="resume" name="contact" placeholder="Mobile No" required>
                 <input type="email" pattern ="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$" id="resume" name="email" placeholder="Email" required>
@@ -172,8 +174,7 @@
                 <input type="file" id="resume" name="file" accept=".pdf,.doc,.docx" required>
                 <button type="submit">Upload</button>
             </form>
-                </div>
-                
+        </div>
         <div id="search-form">
             <h2>Search Resume</h2>
             <form action="/login/all_files" method="get" enctype="multipart/form-data" >
@@ -242,6 +243,7 @@
 </script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </body>
 </html>

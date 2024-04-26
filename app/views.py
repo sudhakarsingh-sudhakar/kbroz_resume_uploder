@@ -108,8 +108,9 @@ def index():
 # API route for uploading PDF files
 @app.route('/login/upload', methods=['POST'])
 def upload_file():
+    token = request.cookies.get('jwt_token')
     keyword = request.form.get('keyword')
-    user = request.form.get("user")
+    user = request.form.get("username")
     file = request.files['file']
     salary = request.form['selectCTC']
     contact = request.form['contact']
@@ -118,10 +119,19 @@ def upload_file():
     location = request.form['location']
     file_name = file.filename
     print(f"name : {user} , keyword : {keyword}, filename : {file_name}, sal  :{ salary}, ctc : {experience , contact , email} ")
+    if not token : 
+        return render_template("index.html")
 
-    if not (keyword and file):
+    if not (keyword and file) :
         # return jsonify({'error': 'Keyword and file are required.'}), 400
         return render_template("homepage.html")
+    # if token:
+    #     decoded_token = jwt.decode(token, algorithms=["HS256"])
+    #     print(f"nfjnfdjf{decoded_token}")
+
+    #     email = decoded_token.get('user_email')
+    #     print(f'emaill  : {email}')
+
 
     uploaded_file = UploadedFile(keyword = keyword, user = user , file_name = file_name , 
                                  salary = salary, experience =  experience,location = location, 
@@ -129,7 +139,9 @@ def upload_file():
     db.session.add(uploaded_file)
     db.session.commit()
 
-    return render_template("homepage.html", message = "File uploaded succesfully")
+    #return render_template("homepage.html",  message ='Your details were successfully received.')
+    # Redirect to a different URL after successful form submission
+    return redirect(url_for('login_route',message ='Your details were successfully received.'))
 # download file on basis of keyword
 @app.route('/login/download', methods=['GET'])
 def download_file():
@@ -241,6 +253,9 @@ def update_file(id):
     keyword = request.form.get('keyword')
     user = request.form.get("user")
     file = request.files.get('file')  # Use get() to safely get the file, which can be None
+    contact = request.form.get('contact')
+    location = request.form.get('location')
+    email = request.form.get('email')
     file_name = request.form.get('file_name')
     print(f"keyword {keyword}")
 
@@ -260,13 +275,17 @@ def update_file(id):
     uploaded_file.keyword = keyword
     uploaded_file.user = user
     uploaded_file.file_name = file_name
+    uploaded_file.location = location
+    uploaded_file.contact = contact
+    uploaded_file.email = email
 
     # Update the file data if a new file is provided
     if file:
         uploaded_file.file_name = file.filename
         uploaded_file.file_data = file.read()
     files = UploadedFile.query.filter(UploadedFile.keyword.like(f'{SEARCH}%')).all()
-    files_data = [{'id': file.id, 'keyword': file.keyword,'file_name': file.file_name,'user':file.user} for file in files]
+    files_data = [{'id': file.id, 'keyword': file.keyword,'file_name': file.file_name,'user':file.user, 'location':file.location ,'contact'
+                   :file.contact , 'email' :file.email} for file in files]
 
     db.session.commit()
 
