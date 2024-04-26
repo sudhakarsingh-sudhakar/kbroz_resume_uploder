@@ -20,8 +20,26 @@ class User(db.Document):
     updated_by = db.Column(db.String(100))
     updated_on = db.Column(db.DateTime)
     designation = db.Column(db.String(100))
+    token = db.Column(db.String(300))
     password_expires_at = db.Column(db.DateTime)
     state = db.Column(db.Enum('ACTIVE', 'FORGOTTEN_PASSWORD', 'VERIFY_PENDING', 'VERIFIED', 'UNVERIFIED'))
 
     def __repr__(self):
         return f"User(id={self.id}, username={self.username}, email={self.email})"
+
+
+class UploadedFile(db.Model):
+    __tablename__ = 'tbl_uploaded'
+
+    id = db.Column(db.Integer, primary_key=True)
+    keyword = db.Column(db.String(100))
+    user = db.Column(db.String(100))
+    file_data = db.Column(db.LargeBinary) 
+    file_name = db.Column(db.String(255))
+    location = db.Column(db.String(100))
+    salary = db.Column(db.BigInteger)
+    experience = db.Column(db.Float)
+
+
+    def __repr__(self):
+        return f"UploadedFile(id={self.id}, keyword={self.keyword})"

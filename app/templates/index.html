@@ -1,20 +1,134 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="static/main.css">
+    <style>
+        body {
+	background-color: #f4f4f4;
+	background-image: url('background.jpg');
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: cover;
+}
+
+.container {
+	width: 300px;
+	margin: 0 auto;
+	padding: 20px;
+	border: 1px solid #ccc;
+	box-shadow: 0px 0px 5px rgba(0,0,0,0.1);
+	background-color: #fff;
+	margin-top: 100px;
+	padding-top: 30px;
+	padding-bottom: 30px;
+}
+
+.container h2 {
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.container label {
+	display: block;
+	margin-bottom: 5px;
+}
+
+.container input[type="email"], .container input[type="password"] {
+	width: 100%;
+	padding: 5px;
+	margin-bottom: 10px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	box-sizing: border-box;
+}
+
+.container input[type="checkbox"] {
+	margin-right: 10px;
+}
+
+.container button[type="submit"] {
+	width: 100%;
+	padding: 10px;
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+.container button[type="submit"]:hover {
+	background-color: #45a049;
+}
+
+.container button[type="button"] {
+	width: 48%;
+	padding: 10px;
+	background-color: #ddd;
+	color: #333;
+	border: none;
+	border-radius: 3px;
+	cursor: pointer;
+	margin-right: 2%;
+}
+
+.container button[type="button"]:hover {
+	background-color: #eee;
+}
+
+.container button[type="button"]:last-child {
+	margin-right: 0;
+}
+    </style>
 </head>
 <body>
-	<div class="container">
-		<h2>Login</h2>
-		<form id="loginForm" action="/login" method="post">
-			<label for="email">Email Address</label><br>
-			<input type="email" id="email" name="email" value="you@example.com"><br>
-			<label for="pwd"><a href="#">Forget Passcode?</a></label><br>
-			<input type="password" id="pwd" name="pwd" placeholder="Enter 6 character or more"><br>
-			<label for="remember"><input type="checkbox" id="remember" name="remember"> Remember me</label><br>
-			<button type="submit">LOGIN</button><br>
-			<label for="email">Doesn't have an account yet? <a href="#">forget Password ? </a></label><br>
-		</form>
-	</div>
-</body>
-</html>
+    <div class="container">
+        <h2>KBROZ</h2>
+        {% if message %}
+        <p>{{ message }}</p>
+        {% endif %}
+        <form id="loginForm" action="/login" method="post">
+            <!-- <label for="email">Doesn't have an account yet? <a href="#">Sign Up</a></label><br> -->
+            <label for="email">Email Address</label><br>
+            <input type="email" id="email" name="email" placeholder="you@example.com" required><br>
+            <!-- <label for="pwd">Forgot Password?</label><br> -->
+            <label for="email">Password</label><br>
+            <input type="password" id="pwd" name="password" placeholder="Enter 6 character or more" required><br>
+            <label for="remember"><input type="checkbox" id="remember" name="remember"> Remember me</label><br>
+            <button type="submit">LOGIN</button><br>
+            <script>
+                function login() {
+                    var email = document.getElementById('email').value;
+                    var password = document.getElementById('password').value;
+        
+                    fetch('/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ email: email, password: password })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status) {
+                            // Login successful, show success message
+                            alert(data.message);
+                        } else {
+                            // Login failed, show error message
+                            alert(data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                }
+            </script>
+            <script>
+                // Remove JWT token from local storage
+                localStorage.removeItem('jwt_token');
+                document.cookie = "jwt_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                // Remove session cookie by setting its expiration date to the past
+                document.cookie = "session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+            </script>
+        </body>

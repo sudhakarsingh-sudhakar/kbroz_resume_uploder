@@ -3,32 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>kbroz-Home</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <title>Resume Upload Portal</title>
+    <link rel="stylesheet" type="text/css" href="static/homepage.css">
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+#header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 1rem;
+    text-align: right;
+}
+
+#header a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 1rem;
+}
+
+#header a:hover {
+    text-decoration: underline;
+}
+
+#content {
+    display: flex;
+    justify-content: space-around;
+    padding: 2rem;
+}
+
+#upload-form {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    width: 40%;
+}
+
+#search-form {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    width: 40%;
+}
+
+#upload-form label, #search-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+#upload-form input, #search-form input {
+    width: 100%;
+    padding: 0.3rem;
+    margin-bottom: 1rem;
+}
+
+#upload-form button, #search-form button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#upload-form button:hover, #search-form button:hover {
+    background-color: #3e8e41;
+}
+
+#search-results {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    width: 40%;
+    margin-top: 2rem;
+}
+
+#search-results h3 {
+    margin-top: 0;
+}
+
+#search-results ul {
+    list-style: none;
+    padding: 0;
+}
+
+#search-results li {
+    margin-bottom: 0.5rem;
+}
+
+.tag {
+    display: inline-block;
+    background-color: #4CAF50;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    margin-right: 0.5rem;
+    border-radius: 4px;
+}
+
+@media screen and (max-width: 768px) {
+    #content {
+        flex-direction: column;
+    }
+
+    #upload-form, #search-form {
+        width: 100%;
+    }
+
+    #search-results {
+        width: 100%;
+        margin-top: 1rem;
+    }
+}
+
+    </style>
 </head>
 <body>
+<div class="container">
+    {% if message %}
+    <p>{{ message }}</p>
+    {% endif %}
     <header id="header">
-        <a href="#">Home</a>
-        <a href="#">Logout</a>
+        <a href="#">KBROZ</a>
+        <a href="/logout" method ="GET">Logout</a>
     </header>
     <div id="content">
         <div id="upload-form">
             <h2>Upload Resume</h2>
-            <form action="#">
+            <form action="/login/upload" method="post" enctype="multipart/form-data">
                 <label for="resume">Choose a file:</label>
-                <input type="text" id="resume" name="Name" placeholder="Name">
-                <input type="text" id="resume" name="Tags" placeholder="Tags">
-                <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx">
+                <input type="text" id="resume" name="user" placeholder="Name" required>
+                <input type="text" id="resume" name="keyword" placeholder="Tags" required>
+                <input type="text" id="resume" name="location" placeholder="Location" required>
+                <input type="text" id="resume" name="salary" placeholder="Salary" required>
+                <input type="text" id="resume" name="Experience" placeholder="Experience" required>
+                <input type="file" id="resume" name="file" accept=".pdf,.doc,.docx" required>
                 <button type="submit">Upload</button>
             </form>
         </div>
         <div id="search-form">
             <h2>Search Resume</h2>
-            <form action="#">
-                <input type="text" id="resume" name="search" placeholder="Enter Tags..">
-                <button type="submit">Upload</button>
+            <form action="/login/all_files" method="get" enctype="multipart/form-data">
+                <input type="text" id="resume" name="keyword" placeholder="Enter Tags.." required>
+                <input type="text" id="resume" name="location" placeholder="Enter Location" required>
+                <input type="text" id="resume" name="Experience" placeholder="Enter Experience" required>
+                <input type="text" id="resume" name="salary" placeholder="Enter Salary" required>
+                <button type="submit">Search</button>
             </form>
         </div>
     </div>
-</body>    
+</div>
+
+<script>
+    // Function to display popup notification
+    function showPopup(message) {
+        alert(message);
+    }
+
+    // Check if a success message is present in the HTML
+    var messageElement = document.querySelector('.container p');
+    if (messageElement && messageElement.textContent.includes('Login successful')) {
+        // If success message is found, display popup notification
+        showPopup('Login successful');
+    }
+</script>
+<script>
+    // Get the token from the rendered template
+    var token = "{{ token }}";
     
+    // Check if the token exists
+    if (token) {
+        // Save the token to the browser's local storage
+        localStorage.setItem('jwt_token', token);
+        document.cookie = "jwt_token=" + token + "; path=/; secure=true";
+        console.log("Token saved to local storage:", token);
+    } else {
+        console.error("No token found.");
+    }
+</script>
+
+</body>
+</html>
