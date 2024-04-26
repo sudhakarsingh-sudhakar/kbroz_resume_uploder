@@ -141,7 +141,7 @@ def upload_file():
 
     #return render_template("homepage.html",  message ='Your details were successfully received.')
     # Redirect to a different URL after successful form submission
-    return redirect(url_for('login_route',message ='Your details were successfully received.'))
+    return redirect(url_for('login_route',status_message ='Your details were successfully received.'))
 # download file on basis of keyword
 @app.route('/login/download', methods=['GET'])
 def download_file():

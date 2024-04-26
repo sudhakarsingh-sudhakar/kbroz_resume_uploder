@@ -43,9 +43,12 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>File Name</th>
+                    <th>Name</th>
                     <th>Tags</th>
-                    <th>User</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                    <th>Location</th> 
+                    <th>Resume</th>                 
                     <!-- <th>Created by</th>
                     <th>Created on</th>
                     <th>Updated</th> -->
@@ -56,10 +59,13 @@
                 {% for sr in search_results %}
                     <tr>
                         <td>{{ sr.id }}</td>
-                        <td>{{ sr.file_name }}</td>
-                        <td>{{ sr.keyword }}</td>
                         <td>{{ sr.user }}</td> 
-                        <!-- <td>{{ sr.location }}</td> -->
+                        <td>{{ sr.keyword }}</td>
+                        <td>{{ sr.email }}</td>
+                        <td>{{ sr.contact }}</td>
+                        <td>{{ sr.location }}</td>
+                        <td>{{ sr.file_name }}</td>
+                        <!--  -->
                         <!-- <td>{{ sr.created_dt }}</td>
                         <td>{{ sr.updated_dt }}</td> --> 
                         <td>
@@ -93,6 +99,18 @@
                                         <div class="form-group">
                                             <label>Tags</label>
                                             <input value="{{sr.keyword}}" type="text" name="keyword" class="form-control" id="exampleFormControlInput1" placeholder="Enter Tags">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Location</label>
+                                            <input value="{{sr.location}}" type="text" name="location" class="form-control" id="exampleFormControlInput1" placeholder="Enter Tags">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Contact</label>
+                                            <input value="{{sr.contact}}" type="text" pattern="[6-9]{1}[0-9]{9}" name="contact" class="form-control" id="exampleFormControlInput1" placeholder="Enter Tags">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Email</label>
+                                            <input value="{{sr.email}}" type="email" pattern ="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$" name="email" class="form-control" id="exampleFormControlInput1" placeholder="Enter Tags">
                                         </div>
                                         <div class="form-group">
                                             <input type="file" id="exampleFormControlInput1" name="resume" accept=".pdf,.doc,.docx" class="form-control" >

@@ -174,8 +174,9 @@
                 <input type="file" id="resume" name="file" accept=".pdf,.doc,.docx" required>
                 <button type="submit">Upload</button>
             </form>
-            {% if upload_message %}
-                <p id = "popup" style="color:green;">{{ upload_message }}</p>
+            {% if message %}
+                <p id = "popup" style="color:green;">{{ status_message}}</p>
+>>>>>>> Stashed changes
             {% endif %}
         </div>
         <div id="search-form">
