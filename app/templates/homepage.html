@@ -174,8 +174,8 @@
                 <input type="file" id="resume" name="file" accept=".pdf,.doc,.docx" required>
                 <button type="submit">Upload</button>
             </form>
-            {% if message %}
-                <p id = "popup" style="color:green;">{{ message}}</p>
+            {% if upload_message %}
+                <p id = "popup" style="color:green;">{{ upload_message }}</p>
             {% endif %}
         </div>
         <div id="search-form">
