@@ -8,13 +8,13 @@ from datetime import datetime, timedelta, timezone
 def create_token(user_id):
     # print('user_id: {}'.format(user_id))
     payload = {
-                    'user_id': user_id,
-                    # 'exp': datetime.now() + timedelta(seconds=60)
+    'user_id': user_id,
+    # 'exp': datetime.now() + timedelta(seconds=60)
     }
     jwt_token = jwt.encode(payload, 'secret', algorithm='HS256').decode('utf-8')
     # print ('jwt_token: {}'.format(jwt_token))
     return jwt_token
-# create_token(309651)
+#create_token(309651)
 #function for decoding the jwt token 
 def decode_token(token):
     token = jwt.decode(token, 'secret', algorithms=['HS256'])

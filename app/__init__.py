@@ -22,17 +22,19 @@ app.config['SECRET_KEY'] = secret_key_str
 # # Establish MySQL connection
 # db_connection = mysql.connector.connect(**mysql_config)
 
-# Configure MySQL database connection
+# # Configure MySQL database connection
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:Niraj@localhost:3306/new_etm'
+# app.config['MONGO_URI'] = "URl"
 
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Initialize SQLAlchemy
+# # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# # Initialize SQLAlchemy
 db = SQLAlchemy(app)
+# db = PyMongo(app)
 
-
-# Import your views after initializing the Flask app to avoid circular imports
+# # Import your views after initializing the Flask app to avoid circular imports
 from app import views
 
-# Import models module to ensure the models are created
+# # Import models module to ensure the models are created
 from app import models
