@@ -180,6 +180,14 @@ def list_files():
     partial_salary = request.args.get('selectCTC')
     print(f"partial_keyword  : {partial_keyword} ,, {partial_location},,,defffef,{partial_experience},,,, salary {partial_salary},,,{partial_user}")
     token = request.cookies.get('jwt_token')
+    print("Received query parameters:")
+    print(f"Keyword: {partial_keyword}")
+    print(f"User: {partial_user}")
+    print(f"Email: {partial_email}")
+    print(f"Contact: {partial_contact}")
+    print(f"Location: {partial_location}")
+    print(f"Experience: {partial_experience}")
+    print(f"Salary: {partial_salary}")
     global SEARCH 
     if not token:
         return render_template('index.html')
@@ -251,7 +259,8 @@ def update_file(id):
     token = request.cookies.get('jwt_token')
     keyword = request.form.get('keyword')
     user = request.form.get("user")
-    file = request.files.get('file')  # Use get() to safely get the file, which can be None
+    file = request.files['file'] # Use get() to safely get the file, which can be None
+    print(file)
     contact = request.form.get('contact')
     location = request.form.get('location')
     email = request.form.get('email')
@@ -278,10 +287,27 @@ def update_file(id):
     uploaded_file.contact = contact
     uploaded_file.email = email
 
+    # Handle file update if a new file is provided
+    # if file:
+    #     # Update the file name and file data
+    #     uploaded_file.file_data = file.read()
+
+    #     # Commit the changes to the database
+    #     db.session.commit()
+        
+    #     # Redirect to the search results page
+    #     return redirect('/login/all_files')
+
     # Update the file data if a new file is provided
     if file:
-        uploaded_file.file_name = file.filename
         uploaded_file.file_data = file.read()
+        files = UploadedFile.query.filter(UploadedFile.keyword.like(f'{SEARCH}%')).all()
+        files_data = [{'id': file.id, 'keyword': file.keyword,'file_name': file.file_name,'user':file.user, 'location':file.location ,'contact'
+                   :file.contact , 'email' :file.email,'file_data': uploaded_file.file_data} for file in files]
+        db.session.commit()
+        return render_template("search_result.html",  search_results =files_data)
+
+
     files = UploadedFile.query.filter(UploadedFile.keyword.like(f'{SEARCH}%')).all()
     files_data = [{'id': file.id, 'keyword': file.keyword,'file_name': file.file_name,'user':file.user, 'location':file.location ,'contact'
                    :file.contact , 'email' :file.email} for file in files]
@@ -297,19 +323,43 @@ def delete(id):
     uploaded_file = UploadedFile.query.get(id)
     if not token:
         return render_template('index.html')
+    
+
+    try:
+        
+        # Delete the uploaded file from the database
+        db.session.delete(uploaded_file)
+        files = UploadedFile.query.filter(UploadedFile.keyword.like(f'{SEARCH}%')).all()
+        files_data = [{'id': file.id, 'keyword': file.keyword,'file_name': file.file_name,'user':file.user, 'location':file.location ,'contact'
+                    :file.contact , 'email' :file.email} for file in files]
+        db.session.commit()
+    except Exception as e:
+        print("Error deleting file: " + str(e))
+        return render_template("homepage.html")
+
 
     if not uploaded_file:
-        flash("uploaded file not find")
-        return jsonify({'error': 'Uploaded file not found.'}), 404
-    
-    # Delete the uploaded file from the database
-    db.session.delete(uploaded_file)
-    files = UploadedFile.query.filter(UploadedFile.keyword.like(f'{SEARCH}%')).all()
-    files_data = [{'id': file.id, 'keyword': file.keyword,'file_name': file.file_name,'user':file.user} for file in files]
+        return render_template("search_result.html", search_results=files_data, 
+                       keyword=request.args.get('keyword'), 
+                       user=request.args.get('user'), 
+                       email=request.args.get('email'), 
+                       contact=request.args.get('contact'), 
+                       location=request.args.get('location'),
+                       selectExperiance=request.args.get('selectExperiance'), 
+                       selectCTC=request.args.get('selectCTC'))
 
-    db.session.commit()
 
     #return jsonify(message= 'Uploaded file deleted successfully.', serach_result= files_data), 200
-    return render_template("search_result.html",  search_results =files_data)
+    #return render_template("search_result.html",  search_results =files_data)
+    #redirect to the same page
+    return render_template("search_result.html", search_results=files_data, 
+                       keyword=request.args.get('keyword'), 
+                       user=request.args.get('user'), 
+                       email=request.args.get('email'), 
+                       contact=request.args.get('contact'), 
+                       location=request.args.get('location'),
+                       selectExperiance=request.args.get('selectExperiance'), 
+                       selectCTC=request.args.get('selectCTC'))
     
-    
+
+

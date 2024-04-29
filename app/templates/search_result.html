@@ -74,7 +74,9 @@
                             <!-- <a href="edit/{{ sr.id }}" class="btn btn-success">Edit</a>  -->
                             <a href="/update/{{sr.id}}" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modaledit{{sr.0}}">Edit</a>
                             <a href="/login/download?id={{ sr.id }}" class="btn btn-success btn-sm">Down</a>
-                            <a href="/login/delete/{{ sr.id }}" onClick="return confirm('Are Sure want To Deleted ?')" class="btn btn-danger btn-sm">Del</a>  
+                            <a href="/login/delete/{{ sr.id }}?keyword={{ partial_keyword }}&user={{ partial_user }}&email={{ partial_email }}&contact={{ partial_contact }}&location={{ partial_location }}&selectExperiance={{ partial_experience }}&selectCTC={{ partial_salary }}" onClick="return confirm('Are you sure you want to delete?')" class="btn btn-danger btn-sm">Del</a>
+
+                            <!-- <a href="/login/delete/{{ sr.id }}" onClick="return confirm('Are Sure want To Deleted ?')" class="btn btn-danger btn-sm">Del</a>   -->
                         </td>
                     </tr>
                     <!-- Update -->
@@ -88,9 +90,8 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-
                                     <form action="/login/upload_update/{{sr.id}}" method="POST">
-                                        <input type="hidden" name="id" value="{{sr.user}}">
+                                        <input type="hidden" name="id" value="{{sr.id}}">
                                         <div class="form-group">
                                         <label>Full Name</label>
                                         <input value="{{ sr.user }}" type="text" name="user" class="form-control" id="exampleFormControlInput1" placeholder="Enter Full Name">
@@ -116,7 +117,7 @@
                                             <input value="{{sr.email}}" type="email" pattern ="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$" name="email" class="form-control" id="exampleFormControlInput1" placeholder="Enter Tags">
                                         </div>
                                         <div class="form-group">
-                                            <input type="file" id="exampleFormControlInput1" name="resume" accept=".pdf,.doc,.docx" class="form-control" >
+                                            <input type="file" id="exampleFormControlInput1" name="file" accept=".pdf,.doc,.docx" class="form-control" >
                                         </div>
                                         <button type="submit" class="btn btn-success mb-2">Update</button>
                                     </form>
