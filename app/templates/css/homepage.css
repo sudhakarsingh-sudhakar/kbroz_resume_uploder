@@ -1,0 +1,107 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+#header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
+#header a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 1rem;
+}
+
+#header a:hover {
+    text-decoration: underline;
+}
+
+#content {
+    display: flex;
+    justify-content: space-around;
+    padding: 2rem;
+}
+
+#upload-form {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    width: 40%;
+}
+
+#search-form {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    width: 40%;
+}
+
+#upload-form label, #search-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+#upload-form input, #search-form input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+#upload-form button, #search-form button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#upload-form button:hover, #search-form button:hover {
+    background-color: #3e8e41;
+}
+
+#search-results {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    width: 40%;
+    margin-top: 2rem;
+}
+
+#search-results h3 {
+    margin-top: 0;
+}
+
+#search-results ul {
+    list-style: none;
+    padding: 0;
+}
+
+#search-results li {
+    margin-bottom: 0.5rem;
+}
+
+.tag {
+    display: inline-block;
+    background-color: #4CAF50;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    margin-right: 0.5rem;
+    border-radius: 4px;
+}
+
+@media screen and (max-width: 768px) {
+    #content {
+        flex-direction: column;
+    }
+
+    #upload-form, #search-form {
+        width: 100%;
+    }
+
+    #search-results {
+        width: 100%;
+        margin-top: 1rem;
+    }
+}
