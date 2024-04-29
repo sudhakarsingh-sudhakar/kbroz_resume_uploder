@@ -37,12 +37,8 @@ class UploadedFile(db.Model):
     file_data = db.Column(db.LargeBinary) 
     file_name = db.Column(db.String(255))
     location = db.Column(db.String(100))
-    salary = db.Column(db.String(100))
-    experience = db.Column(db.String(100))
-    email = db.Column(db.String(100))
-    contact = db.Column(db.String(19))
-    uploaded_by = db.Column(db.String(100))
-
+    salary = db.Column(db.BigInteger)
+    experience = db.Column(db.Float)
 
 
     def __repr__(self):
