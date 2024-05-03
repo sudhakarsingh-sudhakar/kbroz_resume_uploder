@@ -90,7 +90,7 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="/login/upload_update/{{sr.id}}" method="POST">
+                                    <form action="/login/upload_update/{{sr.id}}" method="POST" enctype="multipart/form-data">
                                         <input type="hidden" name="id" value="{{sr.id}}">
                                         <div class="form-group">
                                         <label>Full Name</label>
