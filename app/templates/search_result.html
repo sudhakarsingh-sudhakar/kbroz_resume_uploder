@@ -45,10 +45,12 @@
             <thead>
                 <tr>
                     <th>ID</th>
-
-                    <th>File Name</th>
+                    <th>Name</th>
                     <th>Tags</th>
-                    <th>User</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                    <th>Location</th> 
+                    <th>Resume</th>                 
                     <!-- <th>Created by</th>
                     <th>Created on</th>
                     <th>Updated</th> -->
@@ -59,17 +61,22 @@
                 {% for sr in search_results %}
                     <tr>
                         <td>{{ sr.id }}</td>
-                        <td>{{ sr.file_name }}</td>
-                        <td>{{ sr.keyword }}</td>
                         <td>{{ sr.user }}</td> 
-                        <!-- <td>{{ sr.location }}</td> -->
+                        <td>{{ sr.keyword }}</td>
+                        <td>{{ sr.email }}</td>
+                        <td>{{ sr.contact }}</td>
+                        <td>{{ sr.location }}</td>
+                        <td>{{ sr.file_name }}</td>
+                        <!--  -->
                         <!-- <td>{{ sr.created_dt }}</td>
                         <td>{{ sr.updated_dt }}</td> --> 
                         <td>
                             <!-- <a href="edit/{{ sr.id }}" class="btn btn-success">Edit</a>  -->
                             <a href="/update/{{sr.id}}" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modaledit{{sr.0}}">Edit</a>
                             <a href="/login/download?id={{ sr.id }}" class="btn btn-success btn-sm">Down</a>
-                            <a href="/login/delete/{{ sr.id }}" onClick="return confirm('Are Sure want To Deleted ?')" class="btn btn-danger btn-sm">Del</a>  
+                            <a href="/login/delete/{{ sr.id }}?keyword={{ partial_keyword }}&user={{ partial_user }}&email={{ partial_email }}&contact={{ partial_contact }}&location={{ partial_location }}&selectExperiance={{ partial_experience }}&selectCTC={{ partial_salary }}" onClick="return confirm('Are you sure you want to delete?')" class="btn btn-danger btn-sm">Del</a>
+
+                            <!-- <a href="/login/delete/{{ sr.id }}" onClick="return confirm('Are Sure want To Deleted ?')" class="btn btn-danger btn-sm">Del</a>   -->
                         </td>
                     </tr>
                     <!-- Update -->
@@ -83,9 +90,8 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-
-                                    <form action="/login/upload_update/{{sr.id}}" method="POST">
-                                        <input type="hidden" name="id" value="{{sr.user}}">
+                                    <form action="/login/upload_update/{{sr.id}}" method="POST" enctype="multipart/form-data">
+                                        <input type="hidden" name="id" value="{{sr.id}}">
                                         <div class="form-group">
                                         <label>Full Name</label>
                                         <input value="{{ sr.user }}" type="text" name="user" class="form-control" id="exampleFormControlInput1" placeholder="Enter Full Name">
@@ -99,7 +105,19 @@
                                             <input value="{{sr.keyword}}" type="text" name="keyword" class="form-control" id="exampleFormControlInput1" placeholder="Enter Tags">
                                         </div>
                                         <div class="form-group">
-                                            <input type="file" id="exampleFormControlInput1" name="resume" accept=".pdf,.doc,.docx" class="form-control" >
+                                            <label>Location</label>
+                                            <input value="{{sr.location}}" type="text" name="location" class="form-control" id="exampleFormControlInput1" placeholder="Enter Tags">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Contact</label>
+                                            <input value="{{sr.contact}}" type="text" pattern="[6-9]{1}[0-9]{9}" name="contact" class="form-control" id="exampleFormControlInput1" placeholder="Enter Tags">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Email</label>
+                                            <input value="{{sr.email}}" type="email" pattern ="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$" name="email" class="form-control" id="exampleFormControlInput1" placeholder="Enter Tags">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="file" id="exampleFormControlInput1" name="file" accept=".pdf,.doc,.docx" class="form-control" >
                                         </div>
                                         <button type="submit" class="btn btn-success mb-2">Update</button>
                                     </form>
