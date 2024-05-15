@@ -9,7 +9,7 @@ from sqlalchemy import and_
 from sqlalchemy.exc import SQLAlchemyError
 
 
-SEARCH =  None
+SEARCH = ""
 def login():
     data = request.json
     response_data = {}
@@ -366,6 +366,7 @@ def download_file():
 #API route for listing files based on search criteria
 @app.route('/login/all_files', methods=['GET'])
 def list_files():
+    global SEARCH
     try:
         # Get query parameters from request
         partial_keyword = request.args.get('keyword')
@@ -384,6 +385,7 @@ def list_files():
             return render_template('index.html')
 
         if partial_keyword and partial_experience and partial_salary:
+          SEARCH = partial_keyword
           with app.app_context():
            
 #             # Create a scoped session
@@ -483,17 +485,6 @@ def update_file(id):
     uploaded_file.location = location
     uploaded_file.contact = contact
     uploaded_file.email = email
-
-   # Handle file update if a new file is provided
-    if file:
-        # Update the file name and file data
-        uploaded_file.file_data = file.read()
-
-        # Commit the changes to the database
-        db.session.commit()
-        
-        # Redirect to the search results page
-        return redirect('/login/all_files')
 
     # Update the file data if a new file is provided
     if file:
@@ -630,36 +621,22 @@ def delete(id):
         with app.app_context():
             scoped_session = create_scoped_session()
             uploaded_file = scoped_session.query(UploadedFile).get(id)
-        
-        # Check if the file exists
-        if not uploaded_file:
-            flash("Uploaded file not found")
-            return jsonify({'error': 'Uploaded file not found.'}), 404
-
-        # Delete the uploaded file from the database
-        with app.app_context():
-            scoped_session = create_scoped_session()
             scoped_session.delete(uploaded_file)
             scoped_session.commit()
-            scoped_session.close()
-
-        # Fetch updated search results after deletion
-        with app.app_context():
-            scoped_session = create_scoped_session()
             files = scoped_session.query(UploadedFile).filter(UploadedFile.keyword.like(f'{SEARCH}%')).all()
             files_data = [{'id': file.id, 'keyword': file.keyword,'file_name': file.file_name,'user':file.user, 'location':file.location ,'contact'
                         :file.contact , 'email' :file.email} for file in files]
             scoped_session.close()
+            if not files_data :
+                return render_template('homepage.html')
+            return render_template("search_result.html",  search_results =files_data)
+
+           
+        
+            # Check if the file exists
+        
     except Exception as e:
         print("Error deleting file: " + str(e))
         return render_template("error.html", message="Error deleting file"), 500
 
-    # Redirect to the search result page with updated data
-    return render_template("search_result.html", search_results=files_data, 
-                       keyword=request.args.get('keyword'), 
-                       user=request.args.get('user'), 
-                       email=request.args.get('email'), 
-                       contact=request.args.get('contact'), 
-                       location=request.args.get('location'),
-                       selectExperiance=request.args.get('selectExperiance'), 
-                       selectCTC=request.args.get('selectCTC'))
+    
