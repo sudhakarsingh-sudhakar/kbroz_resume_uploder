@@ -208,7 +208,7 @@ def upload_file():
 
 
         # Redirect to the login route with a success message
-        return redirect(url_for('homepage.html', status_message='Your details were successfully received.'))
+        return render_template('homepage.html', status_message='Your details were successfully received.')
 
     except SQLAlchemyError as e:
         # Handle SQLAlchemy errors
@@ -387,8 +387,7 @@ def list_files():
         if partial_keyword and partial_experience and partial_salary:
           SEARCH = partial_keyword
           with app.app_context():
-           
-#             # Create a scoped session
+            # Create a scoped session
             scoped_session = create_scoped_session()
             files = (scoped_session.query(UploadedFile)
                     .filter(and_(
