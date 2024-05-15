@@ -381,8 +381,8 @@ def list_files():
 
         # Check if JWT token is present
         token = request.cookies.get('jwt_token')
-        if not token:
-            return render_template('index.html')
+        # if not token:
+        #     return render_template('index.html')
 
         if partial_keyword and partial_experience and partial_salary:
           SEARCH = partial_keyword
