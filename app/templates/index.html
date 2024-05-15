@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="static/main.css">
+    <!-- <link rel="stylesheet" type="text/css" href="static/main.css"> -->
     <style>
         body {
 	background-color: #f4f4f4;
@@ -122,8 +122,6 @@
                         console.error('Error:', error);
                     });
                 }
-            </script>
-            <script>
                 // Remove JWT token from local storage
                 localStorage.removeItem('jwt_token');
                 document.cookie = "jwt_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
