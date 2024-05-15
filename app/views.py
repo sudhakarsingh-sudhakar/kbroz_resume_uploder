@@ -186,8 +186,8 @@ def upload_file():
         file_name = file.filename
 
         # Check if the token is missing
-        if not token:
-            return render_template("index.html")
+        # if not token:
+        #     return render_template("index.html")
 
         # Check if keyword and file are missing
         if not (keyword and file):
@@ -230,8 +230,8 @@ def download_file():
 
         if not id:
             return jsonify({'error': 'id is required.'}), 400
-        if not token:
-            return render_template('index.html')
+        # if not token:
+        #     return render_template('index.html')
     
         uploaded_file = UploadedFile.query.filter_by(id=id).first()
 
@@ -381,8 +381,8 @@ def list_files():
 
         # Check if JWT token is present
         token = request.cookies.get('jwt_token')
-        if not token:
-            return render_template('index.html')
+        # if not token:
+        #     return render_template('index.html')
 
         if partial_keyword and partial_experience and partial_salary:
           SEARCH = partial_keyword
@@ -470,8 +470,8 @@ def update_file(id):
 
     # Query the database to find the uploaded file record based on the provided id
     uploaded_file = UploadedFile.query.get(id)
-    if not token:
-        return render_template('index.html')
+    # if not token:
+    #     return render_template('index.html')
 
     if not uploaded_file:
         flash("uploaded file not find")
@@ -612,8 +612,8 @@ def update_file(id):
 def delete(id):
     token = request.cookies.get('jwt_token')
     
-    if not token:
-        return render_template('index.html')
+    # if not token:
+    #     return render_template('index.html')
 
     try:
         # Query the database to find the uploaded file record based on the provided id
