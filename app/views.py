@@ -208,7 +208,7 @@ def upload_file():
 
 
         # Redirect to the login route with a success message
-        return redirect(url_for('login_route', status_message='Your details were successfully received.'))
+        return redirect(url_for('homepage.html', status_message='Your details were successfully received.'))
 
     except SQLAlchemyError as e:
         # Handle SQLAlchemy errors
