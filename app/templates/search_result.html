@@ -36,8 +36,10 @@
 </head>
 <body>
     <header id="header">
+        <a href="/login" method ="GET">Home</a>
     
         <a href="/logout" method ="GET">Logout</a>
+        
     </header>
     <div class="container">
         <button type="button" onclick="tableToCSV()" class="btn btn-warning btn-sm"> Export To CSV </button>
@@ -72,7 +74,7 @@
                         <td>{{ sr.updated_dt }}</td> --> 
                         <td>
                             <!-- <a href="edit/{{ sr.id }}" class="btn btn-success">Edit</a>  -->
-                            <a href="/update/{{sr.id}}" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modaledit{{sr.0}}">Edit</a>
+                            <a href="/update/{{sr.id}}" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modaledit{{sr.id}}">Edit</a>
                             <a href="/login/download?id={{ sr.id }}" class="btn btn-success btn-sm">Down</a>
                             <a href="/login/delete/{{ sr.id }}?keyword={{ partial_keyword }}&user={{ partial_user }}&email={{ partial_email }}&contact={{ partial_contact }}&location={{ partial_location }}&selectExperiance={{ partial_experience }}&selectCTC={{ partial_salary }}" onClick="return confirm('Are you sure you want to delete?')" class="btn btn-danger btn-sm">Del</a>
 
@@ -80,7 +82,7 @@
                         </td>
                     </tr>
                     <!-- Update -->
-                    <div id="modaledit{{sr.0}}" class="modal fade" role="dialog">
+                    <div id="modaledit{{sr.id}}" class="modal fade" role="dialog">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
