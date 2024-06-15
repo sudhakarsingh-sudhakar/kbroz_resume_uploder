@@ -157,7 +157,11 @@
                 <input type="text" id="resume" name="contact" placeholder="Mobile No">
                 <input type="text" id="resume" name="email" placeholder="Email">
                 <input type="text" id="resume" name="location" placeholder="Location">
-                <div class="form-group custom-dropdown">
+                <input type="text" id="resume" pattern="[><=]{1}[0-9]{0,2}" name="selectExperiance" placeholder="Experiance" >
+                <small>Sample Input [>10] allowed comparator [>,<,=],No spaces please.</small>
+                <input type="text" id="resume" pattern="[><=]{1}[0-9]{0,2}" name="selectCTC" placeholder="CTC">
+                <small>Sample Input [>10] allowed comparator [>,<,=],No spaces please.</small>
+<!--                 <div class="form-group custom-dropdown">
                     <select class="form-control form-control-lg" id="resume" name="selectExperiance">
                         <option value="">Select Experience</option>
                         <option value="exp1">Fresher</option>
@@ -180,7 +184,7 @@
                         <option value="CTC6">21-25 Lakhs</option>
                         <option value="CTC7">26+ Lakhs</option>
                     </select>
-                </div>
+                </div> -->
                 <button type="submit">Search</button>
             </form>
             <!-- Uncomment if needed
