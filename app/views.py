@@ -251,6 +251,30 @@ def download_file():
 @app.route('/login/all_files', methods=['GET'])
 def list_files():
     global SEARCH
+    # Define experience mapping
+    experience_dict = {
+        "exp1": "0",
+        "exp2": "1-3",
+        "exp3": "4-6",
+        "exp4": "7-10",
+        "exp5": "11-15",
+        "exp6": "16-20",
+        "exp7": "20"
+    }
+    ctc_dict = {
+    "CTC1": "0-3",
+    "CTC2": "4-8",
+    "CTC3": "9-12",
+    "CTC4": "13-16",
+    "CTC5": "17-20",
+    "CTC6": "21-25",
+    "CTC7": "26+"
+    }
+    ctc_keys = list(ctc_dict.keys())
+
+    # Extract keys from the dictionary
+    experience_keys = list(experience_dict.keys())
+
     try:
         # Get query parameters
         partial_keyword = request.args.get('keyword')
@@ -260,6 +284,7 @@ def list_files():
         partial_location = request.args.get('location')
         partial_experience = request.args.get('selectExperiance')
         partial_salary = request.args.get('selectCTC')
+
 
         print(f"Received query parameters: Keyword: {partial_keyword}, User: {partial_user}, Email: {partial_email}, Contact: {partial_contact}, Location: {partial_location}, Experience: {partial_experience}, Salary: {partial_salary}")
 
@@ -290,18 +315,124 @@ def list_files():
         if partial_location:
             filters.append(UploadedFile.location.like(f'%{partial_location}%'))
             print(f"{filters} partial_location")
-        if partial_experience:
-            filters.append(UploadedFile.experience == partial_experience)
-            print(f"{filters} partial_experience")
-        if partial_salary:
-            filters.append(UploadedFile.salary == partial_salary)
-            print(f"{filters} partial_salary")
+        # if partial_experience:
+        #     filters.append(UploadedFile.experience == partial_experience)
+        #     print(f"{filters} partial_experience")
+        # if partial_salary:
+        #     filters.append(UploadedFile.salary == partial_salary)
+        #     print(f"{filters} partial_salary")
         print(f"{filters} filters")
+        if partial_experience:
+            user_experience = int(partial_experience.strip('<>='))
+            operator = partial_experience[0]  # '<', '>', or '='
+            experience_keys_to_filter = []
+
+            if operator == '<':
+                # Include ranges where the upper bound is less than or equal to user_experience
+                for key in experience_keys:
+                    exp_range = experience_dict[key]
+                    if '-' in exp_range:
+                        lower_bound, upper_bound = map(int, exp_range.split('-'))
+                        if upper_bound < user_experience or (lower_bound <= user_experience <= upper_bound):
+                            experience_keys_to_filter.append(key)
+                    elif exp_range == '0' and user_experience > 0:
+                        experience_keys_to_filter.append(key)
+                    elif exp_range.endswith('+') and user_experience >= int(exp_range[:-1].strip()):
+                        experience_keys_to_filter.append(key)
+                print(f"Keys for experience less than or equal to {user_experience}: {experience_keys_to_filter}")
+
+            elif operator == '>':
+                # Include ranges where the lower bound is greater than or equal to user_experience
+                for key in experience_keys:
+                    exp_range = experience_dict[key]
+                    if '-' in exp_range:
+                        lower_bound, upper_bound = map(int, exp_range.split('-'))
+                        if lower_bound > user_experience or (lower_bound <= user_experience <= upper_bound):
+                            experience_keys_to_filter.append(key)
+                    elif exp_range.endswith('+'):
+                        experience_keys_to_filter.append(key)
+                    elif int(exp_range) > user_experience:
+                        experience_keys_to_filter.append(key)
+                print(f"Keys for experience greater than or equal to {user_experience}: {experience_keys_to_filter}")
+
+            elif operator == '=':
+                # Include ranges that cover exactly user_experience
+                for key in experience_keys:
+                    exp_range = experience_dict[key]
+                    if '-' in exp_range:
+                        lower_bound, upper_bound = map(int, exp_range.split('-'))
+                        if lower_bound <= user_experience <= upper_bound:
+                            experience_keys_to_filter.append(key)
+                    elif exp_range.endswith('+') and user_experience >= int(exp_range[:-1].strip()):
+                        experience_keys_to_filter.append(key)
+                    elif exp_range == str(user_experience):
+                        experience_keys_to_filter.append(key)
+                print(f"Keys for exact experience {user_experience}: {experience_keys_to_filter}")
+
+            # Convert experience keys to actual experience ranges or values
+
+        #print(f"Flattened experience values: {flattened_experience_values}")
+
+        # Use the flattened experience values in the SQLAlchemy filter
+            filters.append(UploadedFile.experience.in_(experience_keys_to_filter))
+        # Handle CTC (Salary) filter
+        if partial_salary:
+            user_ctc = int(partial_salary.strip('<>='))
+            operator = partial_salary[0]  # Get '<', '>', or '='
+            ctc_keys_to_filter = []
+            if operator == '<':
+                # Include ranges where the upper bound is less than or equal to user_experience
+                for key in ctc_keys:
+                    exp_range = ctc_dict[key]
+                    if '-' in exp_range:
+                        lower_bound, upper_bound = map(int, exp_range.split('-'))
+                        if upper_bound < user_ctc or (lower_bound <= user_ctc <= upper_bound):
+                            ctc_keys_to_filter.append(key)
+                    elif exp_range == '0' and user_ctc > 0:
+                        ctc_keys_to_filter.append(key)
+                    elif exp_range.endswith('+') and user_ctc >= int(exp_range[:-1].strip()):
+                        ctc_keys_to_filter.append(key)
+                print(f"Keys for ctc less than or equal to {user_ctc}: {ctc_keys_to_filter}")
+            elif operator == '>':
+                # Include ranges where the lower bound is greater than or equal to user_experience
+                for key in ctc_keys:
+                    exp_range = ctc_dict[key]
+                    if '-' in exp_range:
+                        lower_bound, upper_bound = map(int, exp_range.split('-'))
+                        if lower_bound > user_ctc or (lower_bound <= user_ctc <= upper_bound):
+                            ctc_keys_to_filter.append(key)
+                    elif exp_range.endswith('+'):
+                        ctc_keys_to_filter.append(key)
+                    elif int(exp_range) > user_ctc:
+                        ctc_keys_to_filter.append(key)
+                print(f"Keys for ctc greater than or equal to {user_ctc}: {ctc_keys_to_filter}")
+            elif operator == '=':
+                # Include ranges that cover exactly user_experience
+                for key in ctc_keys:
+                    exp_range = ctc_dict[key]
+                    if '-' in exp_range:
+                        lower_bound, upper_bound = map(int, exp_range.split('-'))
+                        if lower_bound <= user_ctc <= upper_bound:
+                            ctc_keys_to_filter.append(key)
+                    elif exp_range.endswith('+') and user_ctc >= int(exp_range[:-1].strip()):
+                        ctc_keys_to_filter.append(key)
+                    elif exp_range == str(user_ctc):
+                        ctc_keys_to_filter.append(key)
+                print(f"Keys for exact experience {user_ctc}: {ctc_keys_to_filter}")
+
+            filters.append(UploadedFile.salary.in_(ctc_keys_to_filter))
+
+
+            
+              
+            
 
         SEARCH = filters
+        print(f"{filters}:.....")
 
         # Apply filters only if they exist
         query = UploadedFile.query
+
         if filters:
             query = query.filter(*filters)
             print(f"{query} querry")
