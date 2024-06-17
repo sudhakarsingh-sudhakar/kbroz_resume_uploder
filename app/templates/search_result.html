@@ -32,7 +32,7 @@
     <script defer src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
     <script defer src="https://cdn.datatables.net/2.0.3/js/dataTables.bootstrap5.js"></script>
 
-    <script defer src="{% static '/js/search.js' %}"></script>
+    <script defer src="{{ url_for('static', filename='js/search.js') }}"></script>
     
 </head>
 <body>
