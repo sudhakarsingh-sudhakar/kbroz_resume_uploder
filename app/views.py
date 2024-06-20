@@ -8,7 +8,6 @@ from io import BytesIO
 from sqlalchemy import and_
 from sqlalchemy.exc import SQLAlchemyError
 
-import pandas as pd
 
 SEARCH = ""
 def login():
@@ -598,45 +597,5 @@ def delete(id):
     except Exception as e:
         print("Error deleting file: " + str(e))
         return render_template("error.html", message="Error deleting file"), 500
-
-
-@app.route('/dashboard',methods=['GET'])
-def get_dashboard():
-    """
-    This API will fetch all data form uplaod file DB and represent to Graph
-    """
-    #Read all ORM Data to Pandas DataFrame
-    experience_dict = {
-        "exp1": "0",
-        "exp2": "1-3",
-        "exp3": "4-6",
-        "exp4": "7-10",
-        "exp5": "11-15",
-        "exp6": "16-20",
-        "exp7": "20"
-    }
-    df = ormObject_to_dataframe(UploadedFile.query.all())
-
-    #Creating Temp columns for calculation
-    df['count'] = 1
-    df['experience_range'] = df['experience'].map(experience_dict)
-    #Create a Copy of Original Data
-    reset_df = df.copy()
-
-    #Location Based profile Chart
-    plot_location_profile = draw_chart('pie','location','count','LOCATION BASED USER COUNT',df)
-    #fig 2 (Experiance Based Profile Count)
-    plot_experience_profile = draw_chart('pie','experience_range','count','EXPERIENCE BASED USER COUNT',df)
-    #fig3 (Keyword Based profile Count)
-    plot_skill_profile = draw_chart('pie','keyword','count','PROFILE BASED USER COUNT',df)
-    
-    return render_template('dashboard.html',
-                           location_fig= plot_location_profile,
-                           exp_fig =plot_experience_profile,
-                           keyword_fig = plot_skill_profile,
-                           total_record_count = df.drop_duplicates(subset=['user', 'email']).shape[0],
-                           total_count = reset_df.shape[0] )
-    
-    
 
     
