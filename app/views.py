@@ -70,7 +70,9 @@ def login_route():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        if request.method == "GET" and token:
+        # if request.method == "GET" and token:
+        #     return render_template("homepage_search.html")
+        if request.method == "GET" :
             return render_template("homepage_search.html")
 
         if not email or not password:
