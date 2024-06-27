@@ -2,6 +2,10 @@ from random import randint
 import jwt
 from datetime import datetime, timedelta, timezone
 
+import plotly.express as px
+from plotly.offline import plot
+import plotly.graph_objs as go
+import pandas as pd
 #otp_util() will return 6 digit random integer number
 
 # this function creates jwt tokens -session
@@ -73,5 +77,34 @@ def get_if_exists(model, **kwargs):
     except model.DoesNotExist:  # Be explicit about exceptions
         obj = None
     return obj
+
+def draw_chart(typ:str,label:str,value:str,title:str,data):
+    """
+    This Utility will draw charts based request
+    """
+    if typ.lower() =='pie':
+        fig = go.Figure(data = [go.Pie(
+            labels = data[label].to_list(),
+            values = data[value].to_list(),
+            textinfo ='label+value',
+            hoverinfo='label+percent',
+            hole = .6,
+            insidetextorientation = 'radial',
+            title = title
+        ),])
+
+        fig.update_layout(margin=dict(t=9,l=9,r=9,b=9))
+        return plot(fig,output_type ='div')
+    else:
+        print("Invalid Chart Name")
+
+def ormObject_to_dataframe(object):
+    """
+    Change DB object to Table.
+    """
+    data = [dictData.__dict__ for dictData in object]
+    for item in data:
+        item.pop('_sa_instance_state', None)
+    return  pd.DataFrame(data)
 
 
