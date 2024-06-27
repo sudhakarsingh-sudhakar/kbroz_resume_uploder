@@ -288,10 +288,10 @@ def list_files():
 
         print(f"Received query parameters: Keyword: {partial_keyword}, User: {partial_user}, Email: {partial_email}, Contact: {partial_contact}, Location: {partial_location}, Experience: {partial_experience}, Salary: {partial_salary}")
 
-        # Check if JWT token is present
-        token = request.cookies.get('jwt_token')
-        if not token:
-            return render_template('index.html')
+        # # Check if JWT token is present
+        # token = request.cookies.get('jwt_token')
+        # if not token:
+        #     return render_template('index.html')
         
         # Check if no search criteria are provided
         if not any([partial_keyword, partial_user, partial_email, partial_contact, partial_location, partial_experience, partial_salary]):
@@ -436,6 +436,7 @@ def list_files():
         if filters:
             query = query.filter(*filters)
             print(f"{query} querry")
+           
 
         files = query.all()
         #SEARCH = files
